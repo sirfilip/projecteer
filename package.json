@@ -1,0 +1,19 @@
+{
+  "name": "projecteer",
+  "version": "1.0.0",
+  "description": "Project Management App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Project",
+    "Management"
+  ],
+  "author": "Filip Kostovski",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mocha": "^2.4.5"
+  }
+}
