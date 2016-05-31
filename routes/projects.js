@@ -22,11 +22,11 @@ router.post('/', function(req, res, next) {
             .example("Example Project"),
     description: Joi.string().label('description'),
     visibility: Joi.string()
-            .regex(/^public|private$/)
+            .valid('public', 'private')
             .optional()
             .label('visibility'),
     status: Joi.string()
-            .regex(/^(opened|closed)$/)
+            .valid('opened', 'closed')
             .optional()
             .label('status')
   });
