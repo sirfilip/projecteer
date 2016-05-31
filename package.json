@@ -4,7 +4,7 @@
   "description": "Project Management App",
   "main": "server.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha"
+    "test": "node_modules/mocha/bin/mocha -R spec --recursive"
   },
   "keywords": [
     "Project",
@@ -14,6 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.4",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "mongoose": "^4.4.19",
+    "supertest": "^1.2.0"
   }
 }

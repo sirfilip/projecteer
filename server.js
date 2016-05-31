@@ -1,5 +1,9 @@
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/projecteer');
+
 var app = require('./app');
 var port = process.env.PORT || 3000;
+
 
 
 
