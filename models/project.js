@@ -46,8 +46,8 @@ projectSchema.pre('save', function(next) {
 });
 
 // static methods
-projectSchema.statics.public = function(callback) {
-  return this.find({visibility: 'public'}, callback);
+projectSchema.statics.public = function() {
+  return this.find({visibility: 'public'});
 };
 
 // instance methods

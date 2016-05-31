@@ -18,40 +18,41 @@ describe(Project, function() {
     return Project.remove({}, done);
   });
 
-  // it('can find all public projects', function(done) {
-  //   var publicProject = new Project({name: 'my public project'});
-  //   var privateProject = new Project({name: 'my private project'});
-  //   privateProject.makePrivate();
-  //   async.parallel([
-  //     function(callback) {
-  //       publicProject.save(function(err, result) {
-  //         if (err) {
-  //           callback(err);
-  //         } else {
-  //           callback(null);
-  //         }
-  //       });
-  //     },
-  //     function(callback) {
-  //       privateProject.save(function(err, result) {
-  //         if (err) {
-  //           callback(err);
-  //         } else {
-  //           callback(null);
-  //         }
-  //       });
-  //     }
-  //   ], function(err, result) {
-  //     if (err) done(err);
-  //     Project.public(function(err, result) {
-  //       assert.equal(null, err);
-  //       assert.equal(1, result.length);
-  //       var foundProject = result[0];
-  //       assert.equal(publicProject.id.toString(), foundProject.id.toString());
-  //       done();
-  //     });
-  //   });
-  // });
+  it('can find all public projects', function(done) {
+    var publicProject = new Project({name: 'my public project'});
+    var privateProject = new Project({name: 'my private project'});
+    privateProject.makePrivate();
+    async.parallel([
+      function(callback) {
+        publicProject.save(function(err, result) {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
+      },
+      function(callback) {
+        privateProject.save(function(err, result) {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
+      }
+    ], function(err, result) {
+      if (err) done(err);
+      Project.public().then(function(result) {
+        assert.equal(1, result.length);
+        var foundProject = result[0];
+        assert.equal(publicProject.id.toString(), foundProject.id.toString());
+        done();
+      }).catch(function(err) {
+        done(err);
+      });
+    });
+  });
 
   it('opened by default', function() {
     var project = new Project();
