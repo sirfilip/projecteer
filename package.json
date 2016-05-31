@@ -13,7 +13,9 @@
   "author": "Filip Kostovski",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.1",
     "express": "^4.13.4",
+    "joi": "^8.4.0",
     "mocha": "^2.4.5",
     "mongoose": "^4.4.19",
     "supertest": "^1.2.0"
