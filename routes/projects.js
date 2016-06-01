@@ -1,6 +1,21 @@
 var router = require('express').Router();
 var Project = require('../models/project');
-var Joi = require('joi');
+var indicative  = require('indicative');
+
+var ProjectValidator = {
+  rules: {
+    name: 'max:256|required',
+    descripion: 'max:1024',
+    visibility: 'in:public,private',
+    status: 'in:opened,closed'
+  },
+  messages: {
+    'name.max': 'The name cannot be longer then 256 characters.',
+    'name.required': 'The name of the project is required.',
+    'visibility.in': 'Visibility can be either private or public',
+    'status.in': 'Status can be either opened or closed.',
+  }
+};
 
 router.get('/', function(req, res) {
   Project.find({}).exec(function(err, result) {
@@ -13,30 +28,10 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res, next) {
-  var schema = Joi.object().keys({
-    name: Joi.string()
-            .regex(/^[-a-z0-9_ ]+$/i)
-            .max(256)
-            .required()
-            .label('name')
-            .example("Example Project"),
-    description: Joi.string().label('description'),
-    visibility: Joi.string()
-            .valid('public', 'private')
-            .optional()
-            .label('visibility'),
-    status: Joi.string()
-            .valid('opened', 'closed')
-            .optional()
-            .label('status')
-  });
-  Joi.validate(req.body, schema, function(err, value) {
-    if (err) {
-      res.status(400).json({error: err});
-    } else {
-      req.body = value;
-      next();
-    }
+  indicative.validate(req.body, ProjectValidator.rules, ProjectValidator.messages).then(function() {
+    next();
+  }).catch(function(errors) {
+    res.status(400).json({error: errors});
   });
 }, function(req, res) {
 
@@ -65,32 +60,11 @@ router.get('/:id', function(req, res) {
 });
 
 router.put('/:id', function(req, res, next) {
-  var schema = Joi.object().keys({
-    name: Joi.string()
-            .regex(/^[-a-z0-9_ ]+$/i)
-            .max(256)
-            .required()
-            .label('name')
-            .example("Example Project"),
-    description: Joi.string().label('description'),
-    visibility: Joi.string()
-            .valid('public', 'private')
-            .optional()
-            .label('visibility'),
-    status: Joi.string()
-            .valid('opened', 'closed')
-            .optional()
-            .label('status')
+  indicative.validate(req.body, ProjectValidator.rules, ProjectValidator.messages).then(function() {
+    next();
+  }).catch(function(errors) {
+    res.status(400).json({error: errors});
   });
-  Joi.validate(req.body, schema, function(err, value) {
-    if (err) {
-      res.status(400).json({error: err});
-    } else {
-      req.body = value;
-      next();
-    }
-  });
-
 }, function(req, res) {
   Project.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}, function(err, project) {
     if (err) {

@@ -73,8 +73,25 @@ describe('projects router', function() {
         .expect(400)
         .end(function(err, res) {
           if (err) return done(err);
-          assert.equal('ValidationError', res.body.error.name);
-          assert.equal('name', res.body.error.details[0].path);
+          var error = res.body.error[0];
+          assert.equal('name', error.field);
+          assert.equal('The name of the project is required.', error.message);
+          done();
+        });
+    });
+
+    it('cant create a project with very a name larger then 256 chars', function(done) {
+      var invalidProject = {name: Array(258).join('x')};
+      supertest(app)
+        .post(apiUrl('/'))
+        .set(jsonHeaders)
+        .send(invalidProject)
+        .expect(400)
+        .end(function(err, res) {
+          if (err) return done(err);
+          var error = res.body.error[0];
+          assert.equal('name', error.field);
+          assert.equal('The name cannot be longer then 256 characters.', error.message);
           done();
         });
     });
@@ -88,8 +105,9 @@ describe('projects router', function() {
         .expect(400)
         .end(function(err, res) {
           if (err) return done(err);
-          assert.equal('ValidationError', res.body.error.name);
-          assert.equal('status', res.body.error.details[0].path);
+          var error = res.body.error[0];
+          assert.equal('status', error.field);
+          assert.equal('Status can be either opened or closed.', error.message);
           done();
         });
     });
@@ -116,8 +134,9 @@ describe('projects router', function() {
         .expect(400)
         .end(function(err, res) {
           if (err) return done(err);
-          assert.equal('ValidationError', res.body.error.name);
-          assert.equal('visibility', res.body.error.details[0].path);
+          var error = res.body.error[0];
+          assert.equal('visibility', error.field);
+          assert.equal('Visibility can be either private or public', error.message);
           done();
         });
     });
