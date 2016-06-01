@@ -5,6 +5,8 @@ var app = express();
 
 
 // middlewares
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.json());
 
 // routes
