@@ -1,5 +1,5 @@
 var router = require('express').Router();
-var Project = require('../models/project');
+var Project = require('../../../models/project');
 var indicative  = require('indicative');
 
 var ProjectValidator = {

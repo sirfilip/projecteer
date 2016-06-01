@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 // routes
 app.use(require('./routes/site'));
-app.use('/api/v1/projects', require('./routes/projects'));
+app.use('/api/v1/projects', require('./routes/api/v1/projects'));
 
 
 module.exports = app;
