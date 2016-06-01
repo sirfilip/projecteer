@@ -27,7 +27,7 @@ describe('projects router', function() {
     }
   });
 
-  beforeEach(function(done) {
+  afterEach(function(done) {
     return Project.remove({}, done);
   });
 
