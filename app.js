@@ -15,7 +15,8 @@ app.use(bodyParser.json());
 
 // routes
 app.use(require('./routes/site'));
-app.use('/api/v1/projects', require('./routes/api/v1/projects'));
+app.use('/api/v1/auth', require('./routes/api/v1/auth'));
+app.use('/api/v1/projects', require('./middlewares/auth'), require('./routes/api/v1/projects'));
 
 
 module.exports = app;
