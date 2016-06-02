@@ -65,7 +65,6 @@ router.post('/login', function(req, res, next) {
       message: 'Login successful.'
     }});
   }).catch(function(err) {
-    console.log(err);
     res.json({error: 'Wrong email and password combination'});
   });
 });

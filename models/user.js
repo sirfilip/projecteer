@@ -40,7 +40,7 @@ UserSchema.statics.register = function(user) {
 UserSchema.statics.login = function(email, password) {
   var hashedPassword = hashPassword(password);
   return new Promise(function(resolve, reject) {
-    this.find({email: email, password: hashedPassword}, function(err, user) {
+    this.findOne({email: email, password: hashedPassword}, function(err, user) {
       if (err) {
         reject(err);
       } else {
