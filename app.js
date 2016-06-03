@@ -10,6 +10,7 @@ app.set('view engine', 'handlebars');
 
 // middlewares
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/bower_components'));
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.json());
 
