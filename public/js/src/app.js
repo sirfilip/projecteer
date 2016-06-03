@@ -1,8 +1,25 @@
-var Application = (function($, apiClient) {
+var App = (function($, apiClient) {
 
   var mainContent = document.getElementById('main-content');
 
   return {
+
+    listeners: {},
+
+    on: function(event, cb) {
+      this.listeners[event] = this.listeners[event] || [];
+      this.listeners[event].push(cb);
+      return this;
+    },
+
+    trigger: function(event, data) {
+      if (! this.listeners[event]) return;
+
+      var i;
+      for (i=0; i < this.listeners[event].length; i++) {
+        this.listeners[event][i].call(this, data);
+      }
+    },
 
     page: null,
 
@@ -21,4 +38,7 @@ var Application = (function($, apiClient) {
     }
   }
 })(jQuery, apiClient);
-Application.start();
+App.start();// add some change...
+App.on('auth:login-successfull', function() {
+  App.dashoard();
+});

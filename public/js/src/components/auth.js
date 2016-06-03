@@ -21,7 +21,7 @@ var AuthComponent = React.createClass({
     var email = $(e.target).find('[name=email]').val();
     var password = $(e.target).find('[name=password]').val();
     apiClient.authenticate(email, password).done(function(response) {
-      EM.trigger('auth:login');
+      App.trigger('auth:login-successfull');
     }).fail(function(error) {
       console.error(error);
     });
