@@ -7,8 +7,8 @@ var uglify = require('gulp-uglify');
 
 gulp.task('build', function() {
   return gulp.src([
-    'public/js/src/components/auth.js',
-    'public/js/src/app.js'
+    'public/js/react/components/auth.js',
+    'public/js/react/app.js'
   ])
   .pipe(babel({
     plugins: ['transform-react-jsx']
@@ -20,7 +20,7 @@ gulp.task('build', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('public/js/src/**/*.js', ['build']);
+  gulp.watch('public/js/react/**/*.js', ['build']);
 });
 
 gulp.task('default', ['watch']);

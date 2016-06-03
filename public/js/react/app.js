@@ -38,7 +38,7 @@ var App = (function($, apiClient) {
     }
   }
 })(jQuery, apiClient);
-App.start();// add some change...
+App.start();// add some change.....
 App.on('auth:login-successfull', function() {
   App.dashoard();
 });
