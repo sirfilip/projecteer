@@ -4,6 +4,7 @@ var babel = require('gulp-babel');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
+var nodemon = require('gulp-nodemon');
 
 
 gulp.task('build', function() {
@@ -33,4 +34,12 @@ gulp.task('watch', function() {
   gulp.watch('public/scss/**/*.scss', ['sass']);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('start', function () {
+  nodemon({
+    script: 'server.js',
+    ext: 'js html',
+    env: { 'NODE_ENV': 'development' }
+  });
+});
+
+gulp.task('default', ['build', 'sass', 'watch', 'start']);
