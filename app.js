@@ -1,12 +1,15 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var exphbs  = require('express-handlebars');
+var swig = require('swig');
 
 var app = express();
 
 // configuration
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+
+app.set('view cache', false);
+swig.setDefaults({ cache: false });
 
 // middlewares
 app.use(express.static(__dirname + '/public'));
