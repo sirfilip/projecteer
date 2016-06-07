@@ -37,7 +37,10 @@ var apiClient = (function($) {
       }).done(function(response) {
         if (! response.error) {
           self._setToken(response.data.token);
-          deferred.resolve(response.data.message);
+          deferred.resolve({
+            message: response.data.message,
+            token: response.data.token
+          });
         } else {
           deferred.reject(response.error);
         }

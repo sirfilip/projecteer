@@ -1,44 +1,31 @@
-var App = (function($, apiClient) {
+(function($) {
 
-  var mainContent = document.getElementById('main-content');
+  function autoincrementIdFactory() {
+    var counter = 0;
 
-  return {
-
-    listeners: {},
-
-    on: function(event, cb) {
-      this.listeners[event] = this.listeners[event] || [];
-      this.listeners[event].push(cb);
-      return this;
-    },
-
-    trigger: function(event, data) {
-      if (! this.listeners[event]) return;
-
-      var i;
-      for (i=0; i < this.listeners[event].length; i++) {
-        this.listeners[event][i].call(this, data);
-      }
-    },
-
-    page: null,
-
-    start: function() {
-      if (apiClient.isAuthenticated()) {
-        this.dashboard();
-      } else {
-        this.authenticate();
-      }
-    },
-    dashboard: function() {
-      this.page = ReactDOM.render(React.createElement('h1', null, "Dashboard"), mainContent);
-    },
-    authenticate: function() {
-      this.page = ReactDOM.render(<AuthComponent />, mainContent);
-    }
+    return function() {
+      counter = counter + 1;
+      return counter;
+    };
   }
-})(jQuery, apiClient);
-App.start();// add some change.....
-App.on('auth:login-successfull', function() {
-  App.dashoard();
-});
+
+  var autoIncrementComponentId = autoincrementIdFactory();
+
+  var components = [];
+
+  $(document).ready(function() {
+    _.each(components, function(component) {
+      ReactDOM.unmountComponentAtNode(component.container);
+    });
+
+    $('[data-component]').each(function() {
+      var componentClass = $(this).data('component') + 'Component';
+      var componentId = autoIncrementComponentId();
+      $(this).attr('id', componentId);
+      var component = ReactDOM.render(React.createElement(window.reactComponents[componentClass], null), document.getElementById(componentId));
+      components.push({component: component, container: document.getElementById(componentId)});
+    });
+  });
+
+
+})(jQuery);

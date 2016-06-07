@@ -9,7 +9,9 @@ var nodemon = require('gulp-nodemon');
 
 gulp.task('build', function() {
   return gulp.src([
-    'public/js/react/components/auth.js',
+    'public/js/react/components/LoginForm.js',
+    'public/js/react/components/RegistrationForm.js',
+    'public/js/react/components/Dashboard.js',
     'public/js/react/app.js'
   ])
   .pipe(babel({

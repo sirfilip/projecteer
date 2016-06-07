@@ -19,7 +19,7 @@ app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.json());
 
 // routes
-app.use(cookieParser(), equire('./routes/web/site'));
+app.use(cookieParser(), bodyParser.urlencoded({extended: true}), require('./routes/web/site'));
 app.use('/api/v1/auth', require('./routes/api/v1/auth'));
 app.use('/api/v1/projects', require('./middlewares/auth'), require('./routes/api/v1/projects'));
 
