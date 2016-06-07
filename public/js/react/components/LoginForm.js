@@ -5,7 +5,7 @@
     getInitialState: function() {
 
       return {
-        errorMessage: null
+        errorMessages: []
       };
 
     },
@@ -20,7 +20,7 @@
         $form.get(0).submit();
       }).fail(function(error) {
         this.setState({
-          errorMessage: error
+          errorMessages: error
         });
       }.bind(this));
     },
@@ -28,10 +28,11 @@
     render: function() {
       var errorMessage = null;
 
-      console.log(this.state.errorMessage);
-
-      if (this.state.errorMessage) {
-        var errorMessage = <div className="alert alert-danger">{this.state.errorMessage}</div>;
+      if (this.state.errorMessages.length > 0) {
+        var messages = _.map(this.state.errorMessages, function(error) {
+          return <p>{error.message}</p>;
+        });
+        errorMessage = <div className="alert alert-danger">{messages}</div>;
       }
 
       return (

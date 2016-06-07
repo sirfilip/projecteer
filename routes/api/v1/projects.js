@@ -20,9 +20,9 @@ var ProjectValidator = {
 router.get('/', function(req, res) {
   Project.find({}).exec(function(err, result) {
     if (err) {
-      res.json({error: error, data: null});
+      res.json({error: error, data: null, status: 500});
     } else {
-      res.json({error: null, data: result});
+      res.json({error: null, data: result, status: 200});
     }
   });
 });
@@ -31,7 +31,7 @@ router.post('/', function(req, res, next) {
   indicative.validate(req.body, ProjectValidator.rules, ProjectValidator.messages).then(function() {
     next();
   }).catch(function(errors) {
-    res.status(400).json({error: errors});
+    res.json({error: errors, status: 400});
   });
 }, function(req, res) {
 
@@ -39,7 +39,7 @@ router.post('/', function(req, res, next) {
 
   project.save(function(err) {
     if(err) {
-      res.json({error: err, data: null});
+      res.json({error: err, data: null, status: 500});
     } else {
       res.json({error: null, data: project});
     }
@@ -50,11 +50,11 @@ router.post('/', function(req, res, next) {
 router.get('/:id', function(req, res) {
   Project.findById(req.params.id, function(err, project) {
     if (err) {
-      res.statuc(500).json({error: err});
+      res.json({error: err, status: 500});
     } else if(project) {
-      res.json({error: null, data: project});
+      res.json({error: null, data: project, status: 200});
     } else {
-      res.status(404).json({error: null, data: 'Not Found'});
+      res.json({error: null, data: 'Not Found', status: 404});
     }
   });
 });
@@ -63,16 +63,16 @@ router.put('/:id', function(req, res, next) {
   indicative.validate(req.body, ProjectValidator.rules, ProjectValidator.messages).then(function() {
     next();
   }).catch(function(errors) {
-    res.status(400).json({error: errors});
+    res.json({error: errors, status: 400});
   });
 }, function(req, res) {
   Project.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}, function(err, project) {
     if (err) {
-      res.status(500).json({error: err});
+      res.json({error: err, status: 500});
     } else if (! project) {
-      res.status(404).json({error: null, data: 'Not Found'});
+      res.json({error: null, data: 'Not Found', status: 404});
     } else {
-      res.json({error: null, data: project});
+      res.json({error: null, data: project, status: 200});
     }
   });
 });
@@ -80,9 +80,9 @@ router.put('/:id', function(req, res, next) {
 router.delete('/:id', function(req, res) {
   Project.findByIdAndRemove(req.params.id, function(err) {
     if (err) {
-      res.status(500).json({error: err});
+      res.json({error: err, status: 500});
     } else {
-      res.status(200).json({error: null, data: 'Project Deleted Successfully.'})
+      res.json({error: null, data: 'Project Deleted Successfully.', status: 200});
     }
   });
 });

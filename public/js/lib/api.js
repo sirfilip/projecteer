@@ -13,8 +13,9 @@ var apiClient = (function($) {
       localStorage.setItem('token', token);
     },
     request: function(type, path, data) {
+      var deferred = $.Deferred();
       data = data || {};
-      return $.ajax({
+      $.ajax({
         headers: {
           'x-access-token': this._getToken()
         },
@@ -23,7 +24,15 @@ var apiClient = (function($) {
         contentType: 'application/json; charset=UTF-8',
         dataType: 'json',
         data: JSON.stringify(data)
+      }).done(function(response) {
+        if (response.error === null) {
+          deferred.resolve(response);
+        } else {
+          deferred.reject(response.error);
+        }
       });
+
+      return deferred.promise();
     },
     isAuthenticated: function() {
       return !!this._getToken();
@@ -35,15 +44,11 @@ var apiClient = (function($) {
         email: email,
         password: password
       }).done(function(response) {
-        if (! response.error) {
-          self._setToken(response.data.token);
-          deferred.resolve({
-            message: response.data.message,
-            token: response.data.token
-          });
-        } else {
-          deferred.reject(response.error);
-        }
+        self._setToken(response.data.token);
+        deferred.resolve({
+          message: response.data.message,
+          token: response.data.token
+        });
       }).fail(function(error) {
         deferred.reject(error);
       });

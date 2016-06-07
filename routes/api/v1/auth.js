@@ -37,13 +37,13 @@ router.post('/register', function(req, res, next) {
   indicative.validate(req.body, UserRegistrationValidator.rules, UserRegistrationValidator.messages).then(function() {
     next();
   }).catch(function(err) {
-    res.status(400).json({error: err});
+    res.json({error: err, status: 404});
   });
 }, function(req, res) {
   User.register(req.body).then(function(user){
-    res.json({error: null, data: 'User Created Successfully'});
+    res.json({error: null, data: 'User Created Successfully', status: 200});
   }).catch(function(error) {
-    res.json({error: error, data: 'Failed to create user'});
+    res.json({error: error, status: 500});
   });
 });
 
@@ -52,7 +52,7 @@ router.post('/login', function(req, res, next) {
   indicative.validate(req.body, UserLoginValidator.rules, UserLoginValidator.messages).then(function() {
     next();
   }).catch(function(error) {
-    res.json({error: error});
+    res.json({error: error, status: 404});
   });
 
 },function(req, res) {
@@ -63,9 +63,9 @@ router.post('/login', function(req, res, next) {
     res.json({error: null, data: {
       token: token,
       message: 'Login successful.'
-    }});
+    }, status: 200});
   }).catch(function(err) {
-    res.json({error: 'Wrong email and password combination'});
+    res.json({error: [{message: 'Wrong email and password combination'}], status: 404});
   });
 });
 

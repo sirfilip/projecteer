@@ -1,29 +1,39 @@
-var RegistrationFormComponent = React.createClass({
+(function($, window) {
+  window.reactComponents = window.reactComponents || {};
+  window.reactComponents.RegistrationFormComponent = React.createClass({
 
-  getInitialState: function() {
-    return {
-      errorMessages: []
-    };
-  },
+    getInitialState: function() {
+      return {
+        errorMessages: []
+      };
+    },
 
-  handleSignUp: function(e) {
-    e.preventDefault();
-    var username = $(e.target).find('[name=email]').val();
-    var email = $(e.target).find('[name=email]').val();
-    var password = $(e.target).find('[name=password]').val();
+    handleSignUp: function(e) {
+      e.preventDefault();
+      var username = $(e.target).find('[name=email]').val();
+      var email = $(e.target).find('[name=email]').val();
+      var password = $(e.target).find('[name=password]').val();
 
-    apiClient.request('post', '/auth/register', {
-      username: username,
-      email: email,
-      password: password
-    }).done(function(response) {
-      this.setState({mode: 'login'});
-    }.bind(this)).fail(function(error){
-      console.log(error);
-    });
-  },
+      apiClient.request('post', '/auth/register', {
+        username: username,
+        email: email,
+        password: password
+      }).done(function(response) {
+        window.location.href = '/login';
+      }.bind(this)).fail(function(error){
+        this.setState({errorMessages: error});
+      }.bind(this));
+    },
 
-  render: function() {
+    render: function() {
+      var error = null;
+      if (this.state.errorMessages.length > 0) {
+        var errors = _.map(this.state.errorMessages, function(error) {
+          return <p>{error.message}</p>;
+        });
+        error = <div className="alert alert-danger">{errors}</div>;
+      }
+
       return (
         <div style={{margin: "40px 0"}} className="login">
           <div className="row">
@@ -33,6 +43,7 @@ var RegistrationFormComponent = React.createClass({
       						<strong> Sign Up</strong>
       					</div>
       					<div className="panel-body">
+                  {error}
       						<form role="form" action="#" method="POST" onSubmit={this.handleSignUp}>
       							<fieldset>
       								<div className="row">
@@ -77,6 +88,8 @@ var RegistrationFormComponent = React.createClass({
       		</div>
         </div>
       );
-  }
+    }
 
-});
+  });
+
+})(jQuery, window);

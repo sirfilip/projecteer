@@ -24,7 +24,11 @@ router.post('/login', function(req, res) {
 router.get('/logout', loginRequired, function(req, res) {
   res.cookie('auth', null);
   res.redirect('/login');
-})
+});
+
+router.get('/register', function(req, res) {
+  res.render('register');
+});
 
 router.get('/dashboard', loginRequired, function(req, res) {
   res.render('dashboard');
