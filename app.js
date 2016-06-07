@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var swig = require('swig');
 var cookieParser = require('cookie-parser');
+var apiResponse = require('./middlewares/api_response');
 
 var app = express();
 
@@ -20,8 +21,8 @@ app.use(bodyParser.json());
 
 // routes
 app.use(cookieParser(), bodyParser.urlencoded({extended: true}), require('./routes/web/site'));
-app.use('/api/v1/auth', require('./routes/api/v1/auth'));
-app.use('/api/v1/projects', require('./middlewares/auth'), require('./routes/api/v1/projects'));
+app.use('/api/v1/auth', apiResponse, require('./routes/api/v1/auth'));
+app.use('/api/v1/projects', apiResponse, require('./middlewares/auth'), require('./routes/api/v1/projects'));
 
 
 module.exports = app;

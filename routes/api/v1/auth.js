@@ -37,13 +37,13 @@ router.post('/register', function(req, res, next) {
   indicative.validate(req.body, UserRegistrationValidator.rules, UserRegistrationValidator.messages).then(function() {
     next();
   }).catch(function(err) {
-    res.json({error: err, status: 404});
+    res.failWith(404, err);
   });
 }, function(req, res) {
   User.register(req.body).then(function(user){
-    res.json({error: null, data: 'User Created Successfully', status: 200});
+    res.respondWith('User Created Successfully');
   }).catch(function(error) {
-    res.json({error: error, status: 500});
+    res.failWith(500, error);
   });
 });
 
@@ -52,7 +52,7 @@ router.post('/login', function(req, res, next) {
   indicative.validate(req.body, UserLoginValidator.rules, UserLoginValidator.messages).then(function() {
     next();
   }).catch(function(error) {
-    res.json({error: error, status: 404});
+    res.failWith(400, error);
   });
 
 },function(req, res) {
@@ -60,12 +60,12 @@ router.post('/login', function(req, res, next) {
     var token = jwt.generateTokenFor({
       user_id: user._id
     });
-    res.json({error: null, data: {
+    res.respondWith({
       token: token,
       message: 'Login successful.'
-    }, status: 200});
+    });
   }).catch(function(err) {
-    res.json({error: [{message: 'Wrong email and password combination'}], status: 404});
+    res.failWith(400, 'Wrong email and password combination');
   });
 });
 
