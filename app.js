@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var swig = require('swig');
+var cookieParser = require('cookie-parser');
 
 var app = express();
 
@@ -18,7 +19,7 @@ app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.use(bodyParser.json());
 
 // routes
-app.use(require('./routes/site'));
+app.use(cookieParser(), equire('./routes/web/site'));
 app.use('/api/v1/auth', require('./routes/api/v1/auth'));
 app.use('/api/v1/projects', require('./middlewares/auth'), require('./routes/api/v1/projects'));
 
