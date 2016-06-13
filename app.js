@@ -15,6 +15,9 @@ app.set('view engine', 'html');
 app.set('view cache', false);
 swig.setDefaults({ cache: false });
 
+// gateway
+app.use('/api/projects', require('./middlewares/auth'), mountApi('http://localhost:3001'));
+
 // middlewares
 app.use(db);
 app.use(express.static(__dirname + '/public'));
@@ -26,9 +29,5 @@ app.use(bodyParser.json());
 app.use(cookieParser(), bodyParser.urlencoded({extended: true}), require('./routes/web/site'));
 app.use('/api/v1/auth', apiResponse, require('./routes/api/v1/auth'));
 // app.use('/api/v1/projects', apiResponse, require('./middlewares/auth'), require('./routes/api/v1/projects'));
-
-
-// gateway
-app.use('/api/projects', apiResponse, require('./middlewares/auth'), mountApi('http://localhost:3001'));
 
 module.exports = app;

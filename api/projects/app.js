@@ -1,12 +1,16 @@
 var express = require('express');
 var indicative  = require('indicative');
-var Project = require('./models/project');
+var bodyParser = require('body-parser');
+var ProjectRepo = require('./repos/project');
 var apiResponse = require('../../middlewares/api_response');
 var authRequired = require('../../middlewares/authority');
+var db = require('../../middlewares/db');
 
 var app = express();
+app.use(bodyParser.json());
 app.use(apiResponse);
 app.use(authRequired);
+app.use(db);
 
 var ProjectValidator = {
   rules: {
@@ -24,12 +28,10 @@ var ProjectValidator = {
 };
 
 app.get('/', function(req, res) {
-  Project.find({}).exec(function(err, result) {
-    if (err) {
-      res.failWith(500, error);
-    } else {
-      res.respondWith(result);
-    }
+  ProjectRepo(req.db).all().then(function(result) {
+    res.respondWith(result);
+  }).catch(function(err) {
+    res.failWith(500, error);
   });
 });
 
@@ -40,28 +42,18 @@ app.post('/', function(req, res, next) {
     res.failWith(400, errors);
   });
 }, function(req, res) {
-
-  var project = new Project(req.body);
-
-  project.save(function(err) {
-    if(err) {
-      res.failWith(500, err);
-    } else {
-      res.respondWith(project);
-    }
+  ProjectRepo(req.db).create(req.body).then(function(project) {
+    res.respondWith(project);
+  }).catch(function(err) {
+    res.failWith(500, err);
   });
-
 });
 
 app.get('/:id', function(req, res) {
-  Project.findById(req.params.id, function(err, project) {
-    if (err) {
-      res.failWith(500, err);
-    } else if(project) {
-      res.respondWith(project);
-    } else {
-      res.failWith(404, 'Not Found');
-    }
+  ProjectRepo(req.db).findById(req.params.id).then(function(project){
+    res.respondWith(project);
+  }).catch(function(err) {
+    res.failWith(404, 'Not Found');
   });
 });
 
@@ -72,24 +64,16 @@ app.put('/:id', function(req, res, next) {
     res.failWith(400, errors);
   });
 }, function(req, res) {
-  Project.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}, function(err, project) {
-    if (err) {
-      res.failWith(500, err);
-    } else if (! project) {
-      res.failWith(404, 'Not Found');
-    } else {
-      res.respondWith(project);
-    }
+  ProjectRepo(req.db).findByIdAndUpdate(req.params.id, req.body).then(function(project) {
+    res.respondWith(project);
+  }).catch(function(err) {
+    res.failWith(404, 'Not Found');
   });
 });
 
 app.delete('/:id', function(req, res) {
-  Project.findByIdAndRemove(req.params.id, function(err) {
-    if (err) {
-      res.failWith(500, err);
-    } else {
-      res.respondWith('Project Deleted Successfully.');
-    }
+  ProjectRepo(req.db).delete(req.params.id).then(function() {
+    res.respondWith('Project Deleted Successfully.');
   });
 });
 

@@ -1,7 +1,7 @@
 var jwt = require('../services/jwt');
 
 module.exports = function(req, res, next) {
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  var token = req.headers['x-access-token'] || req.query.token || req.body.token;
 
   if (token) {
     jwt.verify(token).then(function(data) {

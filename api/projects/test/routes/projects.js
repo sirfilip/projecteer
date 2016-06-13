@@ -8,26 +8,10 @@ describe('projects router', function() {
     return '/api/projects' + path;
   };
 
-  function generateId() {
-    return mongoose.Types.ObjectId();
-  };
-
   var jsonHeaders = {
     'Accept': 'application/json',
     'Content-type': 'application/json'
   };
-
-  before(function(done) {
-    if (mongoose.connection.readyState === 0) {
-      mongoose.connect('mongodb://localhost/projecteer_test', done);
-    } else {
-      done();
-    }
-  });
-
-  afterEach(function(done) {
-    return Project.remove({}, done);
-  });
 
   it ('can access all projects', function(done) {
     supertest(app)

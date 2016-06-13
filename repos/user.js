@@ -13,15 +13,18 @@ module.exports = function(db) {
       user.hashedPassword = encrypt(user.password);
       user.password = null;
       user.id = users.insert(user);
-      return user;
+      return new Promise(function(resolve, reject) {
+        resolve(user);
+      });
     },
     login: function(email, password) {
-      var user = users.where({email: email}).items[0];
-      if (user && user.hashedPassword === encrypt(password)) {
-        return user;
-      }
-
-      return null;
+      return new Promise(function(resolve, reject) {
+        var user = users.where({email: email}).items[0];
+        if (user && user.hashedPassword === encrypt(password)) {
+          resolve(user);
+        }
+        reject(null);
+      });
     }
   };
 };

@@ -40,8 +40,9 @@ router.post('/register', function(req, res, next) {
     res.failWith(404, err);
   });
 }, function(req, res) {
-  UserRepo(req.db).register(req.body);
-  res.respondWith('User Created Successfully');
+  UserRepo(req.db).register(req.body).then(function() {
+    res.respondWith('User Created Successfully');
+  });
 });
 
 router.post('/login', function(req, res, next) {
@@ -51,8 +52,7 @@ router.post('/login', function(req, res, next) {
     res.failWith(400, error);
   });
 },function(req, res) {
-  var user = UserRepo(req.db).login(req.body.email, req.body.password);
-  if (user) {
+  var user = UserRepo(req.db).login(req.body.email, req.body.password).then(function(user) {
     var token = jwt.generateTokenFor({
       user_id: user.cid
     });
@@ -60,9 +60,9 @@ router.post('/login', function(req, res, next) {
       token: token,
       message: 'Login successful.'
     });
-  } else {
+  }).catch(function(err) {
     res.failWith(400, 'Wrong email and password combination');
-  }
+  });
 });
 
 module.exports = router;
