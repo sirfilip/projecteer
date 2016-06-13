@@ -17,10 +17,13 @@
     "bootstrap": "^3.3.6",
     "cookie-parser": "^1.4.3",
     "express": "^4.13.4",
+    "http-proxy": "^1.13.3",
     "indicative": "^2.1.0",
     "jsonwebtoken": "^7.0.0",
+    "locallydb": "0.0.9",
     "momentjs": "^1.1.7",
     "mongoose": "^4.4.19",
+    "object-assign": "^4.1.0",
     "swig": "^1.4.2"
   },
   "devDependencies": {

@@ -1,15 +1,10 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/projecteer');
-
 var app = require('./app');
-var port = process.env.PORT || 3000;
+var config = require('./config');
 
 
-
-
-app.listen(port, function(error) {
+app.listen(config.port, function(error) {
   if (error) {
     throw error;
   }
-  console.log('app running on http://localhost:' + port);
+  console.log('app running on http://localhost:' + config.port);
 });

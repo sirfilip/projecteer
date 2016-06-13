@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var indicative = require('indicative');
-var User = require('../../../models/user');
+var UserRepo = require('../../../repos/user');
 var jwt = require('../../../services/jwt');
 
 var UserRegistrationValidator = {
@@ -40,34 +40,29 @@ router.post('/register', function(req, res, next) {
     res.failWith(404, err);
   });
 }, function(req, res) {
-  User.register(req.body).then(function(user){
-    res.respondWith('User Created Successfully');
-  }).catch(function(error) {
-    res.failWith(500, error);
-  });
+  UserRepo(req.db).register(req.body);
+  res.respondWith('User Created Successfully');
 });
 
 router.post('/login', function(req, res, next) {
-
   indicative.validate(req.body, UserLoginValidator.rules, UserLoginValidator.messages).then(function() {
     next();
   }).catch(function(error) {
     res.failWith(400, error);
   });
-
 },function(req, res) {
-  User.login(req.body.email, req.body.password).then(function(user) {
+  var user = UserRepo(req.db).login(req.body.email, req.body.password);
+  if (user) {
     var token = jwt.generateTokenFor({
-      user_id: user._id
+      user_id: user.id
     });
     res.respondWith({
       token: token,
       message: 'Login successful.'
     });
-  }).catch(function(err) {
+  } else {
     res.failWith(400, 'Wrong email and password combination');
-  });
+  }
 });
-
 
 module.exports = router;
