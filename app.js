@@ -29,6 +29,6 @@ app.use('/api/v1/auth', apiResponse, require('./routes/api/v1/auth'));
 
 
 // gateway
-app.use('/api/v1/projects', apiResponse, require('./middlewares/auth'), mountApi('http://localhost:3001'));
+app.use('/api/projects', apiResponse, require('./middlewares/auth'), mountApi('http://localhost:3001'));
 
 module.exports = app;

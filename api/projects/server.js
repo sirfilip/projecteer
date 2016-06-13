@@ -9,6 +9,6 @@ app.listen(config.port, function(err) {
     console.error(err);
     process.exit(1);
   } else {
-    console.log("Projects api running on http://localhost:3001");
+    console.log("Projects api running on http://localhost:" + config.port);
   }
 });

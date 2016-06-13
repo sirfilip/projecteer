@@ -54,7 +54,7 @@ router.post('/login', function(req, res, next) {
   var user = UserRepo(req.db).login(req.body.email, req.body.password);
   if (user) {
     var token = jwt.generateTokenFor({
-      user_id: user.id
+      user_id: user.cid
     });
     res.respondWith({
       token: token,

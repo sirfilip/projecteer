@@ -1,4 +1,4 @@
-function authority = function(req, res, next) {
+function authority(req, res, next) {
   var authority = req.headers['x-authority'];
 
   if (authority) {
