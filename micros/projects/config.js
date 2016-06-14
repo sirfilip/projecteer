@@ -1,3 +1,6 @@
 module.exports = {
-  port: 3001
+  port: 3001,
+  host: 'localhost',
+  active: true,
+  base: '/'
 };

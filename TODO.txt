@@ -1,0 +1,5 @@
++ Create a gulp task that will start up all of the microservices respecting their configuration parameters using nodemon
+
++ Automate mounting of the microservices inside the app.js using their post, host, base path and active params
+
++ Refactor the registration component to use the flux pattern 
