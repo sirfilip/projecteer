@@ -1,6 +1,5 @@
 var router = require('express').Router();
-var jwt = require('../../services/jwt');
-var loginRequired = require('../../middlewares/login-required');
+var loginRequired = require('../../middlewares/auth');
 
 router.get('/', function(req, res) {
   res.redirect('/dashboard');
