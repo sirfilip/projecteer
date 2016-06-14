@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 
 // routes
 app.use(cookieParser(), bodyParser.urlencoded({extended: true}), require('./routes/web/site'));
-app.use('/api/v1/auth', apiResponse, require('./routes/api/v1/auth'));
+app.use('/api/auth', apiResponse, require('./routes/api/v1/auth'));
 // app.use('/api/v1/projects', apiResponse, require('./middlewares/auth'), require('./routes/api/v1/projects'));
 
 module.exports = app;

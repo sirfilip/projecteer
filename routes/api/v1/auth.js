@@ -56,6 +56,7 @@ router.post('/login', function(req, res, next) {
     var token = jwt.generateTokenFor({
       user_id: user.cid
     });
+    res.cookie('auth', token);
     res.respondWith({
       token: token,
       message: 'Login successful.'
