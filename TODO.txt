@@ -5,3 +5,5 @@
 + Refactor the registration component to use the flux pattern
 
 + Write tests
+
++ Make auth a passport strategy and use passport as industry standard
