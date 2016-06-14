@@ -2,4 +2,6 @@
 
 + Automate mounting of the microservices inside the app.js using their post, host, base path and active params
 
-+ Refactor the registration component to use the flux pattern 
++ Refactor the registration component to use the flux pattern
+
++ Write tests

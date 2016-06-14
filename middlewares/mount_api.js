@@ -9,7 +9,6 @@ function mountApi(target, mountPoint) {
       });
       req.headers = headers;
       req.url = req.originalUrl.replace(req.baseUrl, mountPoint);
-      console.log(req.url);
       apiProxy.web(req, res, {
         target: target,
       });
