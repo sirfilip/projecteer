@@ -1,17 +1,38 @@
 var supertest = require('supertest');
 var app = require('../../app');
 var assert = require('assert');
+var mongoose = require('mongoose');
+var Project = require('../../models/project');
 
 describe('projects router', function() {
 
   function  apiUrl(path) {
-    return '/api/projects' + path;
+    var url = path + "?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTc2MDkxMmNmZGQ4MTM3NTEyYTExZmUwIiwiaWF0IjoxNDY1OTQ2ODA3LCJleHAiOjE0NjYwMzMyMDd9.RMCPQOeQQTTIGSUNeTVu4gCqJrHOVFEu1BbTpZVQ6sA";
+    console.log(url);
+    return url;
+  };
+
+  function generateId() {
+    return mongoose.Types.ObjectId();
   };
 
   var jsonHeaders = {
     'Accept': 'application/json',
-    'Content-type': 'application/json'
+    'Content-type': 'application/json',
+    'x-authority': '123'
   };
+
+  before(function(done) {
+    if (mongoose.connection.readyState === 0) {
+      mongoose.connect('mongodb://localhost/projecteer_test', done);
+    } else {
+      done();
+    }
+  });
+
+  afterEach(function(done) {
+    return Project.remove({}, done);
+  });
 
   it ('can access all projects', function(done) {
     supertest(app)
@@ -146,6 +167,7 @@ describe('projects router', function() {
         .set(jsonHeaders)
         .expect(200)
         .end(function(err, res) {
+          console.log(res.body);
           if (err) return done(err);
           assert.equal(null, res.body.error);
           assert.equal(project.name, res.body.data.name);
@@ -213,7 +235,11 @@ describe('projects router', function() {
           if (err) return done(err);
           assert.equal(null, res.body.error);
           assert.equal('Project Deleted Successfully.', res.body.data);
-          done();
+          Project.findOne({_id: project_id}).then(function(project) {
+            assert.equal(null, project);
+            done();
+          });
+
         });
     });
   });

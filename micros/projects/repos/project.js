@@ -1,49 +1,23 @@
-module.exports = function(db) {
-  var projects = db.collection('projects');
+var Project = require('../models/project');
 
-  return {
-    all: function() {
-      return new Promise(function(resolve, reject) {
-        resolve(projects.items)
-      });
-    },
+module.exports =  {
+  all: function() {
+    return Project.find({});
+  },
 
-    create: function(project) {
-      return new Promise(function(resolve, reject) {
-        project.cid = projects.insert(project);
-        resolve(project);
-      });
-    },
+  create: function(project) {
+    return Project.create(project);
+  },
 
-    findById: function(cid) {
-      return new Promise(function(resolve, reject) {
-        var project = projects.get(cid);
-        if (project) {
-          resolve(project);
-        } else {
-          reject(null);
-        }
-      })
-    },
+  findById: function(id) {
+    return Project.findById(id);
+  },
 
-    findByIdAndUpdate: function(cid, project) {
-      return new Promise(function(resolve, reject) {
-        var originalProject = projects.get(cid);
+  findByIdAndUpdate: function(id, project) {
+    return Project.findOneAndUpdate({_id: id}, project,  {new: true});
+  },
 
-        if (! originalProject) {
-          reject(null);
-        } else {
-          projects.update(cid, project);
-          resolve(projects.get(cid));
-        }
-      });
-    },
-
-    delete: function(cid) {
-      return new Promise(function(resolve, reject) {
-        resolve(projects.remove(cid));
-      });
-    }
+  delete: function(id) {
+    return Project.remove({_id: id}).exec();
   }
-
 };

@@ -19,7 +19,7 @@ swig.setDefaults({ cache: false });
 app.use('/api/projects', require('./middlewares/auth'), mountApi('http://localhost:3001'));
 
 // middlewares
-app.use(db);
+// app.use(db);
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/bower_components'));
 app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));

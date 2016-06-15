@@ -40,7 +40,7 @@ router.post('/register', function(req, res, next) {
     res.failWith(404, err);
   });
 }, function(req, res) {
-  UserRepo(req.db).register(req.body).then(function() {
+  UserRepo.register(req.body).then(function() {
     res.respondWith('User Created Successfully');
   });
 });
@@ -52,9 +52,9 @@ router.post('/login', function(req, res, next) {
     res.failWith(400, error);
   });
 },function(req, res) {
-  var user = UserRepo(req.db).login(req.body.email, req.body.password).then(function(user) {
+  var user = UserRepo.login(req.body.email, req.body.password).then(function(user) {
     var token = jwt.generateTokenFor({
-      user_id: user.cid
+      user_id: user._id
     });
     res.cookie('auth', token);
     res.respondWith({

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
+var config = require('../config');
 
 var UserSchema = new mongoose.Schema({
   username: {
@@ -12,19 +13,18 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  password: {
+  hashedPassword: {
     type: String,
     required: true
   }
 });
 
 function hashPassword(password) {
-  var passwordSecret = 'secret';
-  return crypto.createHash('sha256').update(password + ':' + passwordSecret).digest('hex');
+  return crypto.createHash('sha256').update(password + ':' + config.secret).digest('hex');
 }
 
 UserSchema.statics.register = function(user) {
-  user.password = hashPassword(user.password);
+  user.hashedPassword = hashPassword(user.password);
 
   return new Promise(function(resolve, reject) {
     this.create(user, function(err, u) {
@@ -40,11 +40,11 @@ UserSchema.statics.register = function(user) {
 UserSchema.statics.login = function(email, password) {
   var hashedPassword = hashPassword(password);
   return new Promise(function(resolve, reject) {
-    this.findOne({email: email, password: hashedPassword}, function(err, user) {
-      if (err) {
-        reject(err);
-      } else {
+    this.findOne({email: email, hashedPassword: hashedPassword}, function(err, user) {
+      if (user) {
         resolve(user);
+      } else {
+        reject(user);
       }
     });
   }.bind(this));
