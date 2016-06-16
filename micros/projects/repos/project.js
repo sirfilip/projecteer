@@ -1,23 +1,24 @@
 var Project = require('../models/project');
 
 module.exports =  {
-  all: function() {
-    return Project.find({});
+  all: function(authority) {
+    return Project.authorizedFor(authority);
   },
 
-  create: function(project) {
+  create: function(project, authority) {
+    project.created_by = authority;
     return Project.create(project);
   },
 
-  findById: function(id) {
-    return Project.findById(id);
+  findById: function(id, authority) {
+    return Project.authorizedFor(authority).where({_id:id});
   },
 
-  findByIdAndUpdate: function(id, project) {
-    return Project.findOneAndUpdate({_id: id}, project,  {new: true});
+  findByIdAndUpdate: function(id, project, authority) {
+    return Project.findOneAndUpdate({_id: id, authority: authority}, project,  {new: true});
   },
 
-  delete: function(id) {
-    return Project.remove({_id: id}).exec();
+  delete: function(id, authority) {
+    return Project.authorizedFor(authority).remove({_id: id}).exec();
   }
 };

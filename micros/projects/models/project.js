@@ -50,6 +50,10 @@ projectSchema.statics.public = function() {
   return this.find({visibility: 'public'});
 };
 
+projectSchema.statics.authorizedFor = function(authority) {
+  return this.find({authority: authority});
+};
+
 // instance methods
 projectSchema.methods.open = function() {
   this.status = 'opened';

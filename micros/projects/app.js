@@ -26,7 +26,7 @@ var ProjectValidator = {
 };
 
 app.get('/', function(req, res) {
-  ProjectRepo.all().then(function(result) {
+  ProjectRepo.all(req.authority).then(function(result) {
     res.respondWith(result);
   }).catch(function(err) {
     res.failWith(500, error);
@@ -40,7 +40,7 @@ app.post('/', function(req, res, next) {
     res.failWith(400, errors);
   });
 }, function(req, res) {
-  ProjectRepo.create(req.body).then(function(project) {
+  ProjectRepo.create(req.body, req.authority).then(function(project) {
     res.respondWith(project);
   }).catch(function(err) {
     res.failWith(500, err);
@@ -48,7 +48,7 @@ app.post('/', function(req, res, next) {
 });
 
 app.get('/:id', function(req, res) {
-  ProjectRepo.findById(req.params.id).then(function(project){
+  ProjectRepo.findById(req.params.id, req.authority).then(function(project){
     if (project) {
       res.respondWith(project);
     } else {
@@ -64,7 +64,7 @@ app.put('/:id', function(req, res, next) {
     res.failWith(400, errors);
   });
 }, function(req, res) {
-  ProjectRepo.findByIdAndUpdate(req.params.id, req.body).then(function(project) {
+  ProjectRepo.findByIdAndUpdate(req.params.id, req.body, req.authority).then(function(project) {
     res.respondWith(project);
   }).catch(function(err) {
     res.failWith(404, 'Not Found');
@@ -72,7 +72,7 @@ app.put('/:id', function(req, res, next) {
 });
 
 app.delete('/:id', function(req, res) {
-  ProjectRepo.delete(req.params.id).then(function() {
+  ProjectRepo.delete(req.params.id, req.authority).then(function() {
     res.respondWith('Project Deleted Successfully.');
   });
 });
