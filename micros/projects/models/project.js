@@ -1,6 +1,11 @@
 var mongoose = require('mongoose');
 
 var projectSchema = new mongoose.Schema({
+  authority: {
+    type: String,
+    required: true,
+    trim: true
+  },
   name: {
     type: String,
     required: true,

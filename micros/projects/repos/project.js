@@ -6,7 +6,7 @@ module.exports =  {
   },
 
   create: function(project, authority) {
-    project.created_by = authority;
+    project.authority = authority;
     return Project.create(project);
   },
 
