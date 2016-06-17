@@ -48,12 +48,14 @@ app.post('/', function(req, res, next) {
 });
 
 app.get('/:id', function(req, res) {
-  ProjectRepo.findById(req.params.id, req.authority).then(function(project){
-    if (project) {
-      res.respondWith(project);
+  ProjectRepo.findById(req.params.id, req.authority).then(function(projects){
+    if (projects.length !== 0) {
+      res.respondWith(projects.pop());
     } else {
       res.failWith(404, 'Not Found');
     }
+  }).catch(function(err) {
+    res.failWith(500, err);
   });
 });
 
@@ -65,9 +67,13 @@ app.put('/:id', function(req, res, next) {
   });
 }, function(req, res) {
   ProjectRepo.findByIdAndUpdate(req.params.id, req.body, req.authority).then(function(project) {
-    res.respondWith(project);
+    if (project) {
+      res.respondWith(project);
+    } else {
+      res.failWith(404, 'Not Found');
+    }
   }).catch(function(err) {
-    res.failWith(404, 'Not Found');
+      res.failWith(500, err);
   });
 });
 

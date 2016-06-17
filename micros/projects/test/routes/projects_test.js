@@ -6,9 +6,10 @@ var Project = require('../../models/project');
 
 describe('projects router', function() {
 
+  var authority = 123;
+
   function  apiUrl(path) {
-    var url = path + "?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTc2MDkxMmNmZGQ4MTM3NTEyYTExZmUwIiwiaWF0IjoxNDY1OTQ2ODA3LCJleHAiOjE0NjYwMzMyMDd9.RMCPQOeQQTTIGSUNeTVu4gCqJrHOVFEu1BbTpZVQ6sA";
-    console.log(url);
+    var url = path;
     return url;
   };
 
@@ -19,7 +20,7 @@ describe('projects router', function() {
   var jsonHeaders = {
     'Accept': 'application/json',
     'Content-type': 'application/json',
-    'x-authority': '123'
+    'x-authority': authority
   };
 
   before(function(done) {
@@ -38,7 +39,6 @@ describe('projects router', function() {
     supertest(app)
       .get(apiUrl('/'))
       .set(jsonHeaders)
-      .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
         assert.equal(null, res.body.error);
@@ -50,7 +50,7 @@ describe('projects router', function() {
     var validProject;
 
     beforeEach(function() {
-      validProject = {name: 'Test Project'};
+      validProject = {name: 'Test Project', authority: authority};
     });
 
     it('can create a valid project', function(done) {
@@ -58,7 +58,6 @@ describe('projects router', function() {
         .post(apiUrl('/'))
         .set(jsonHeaders)
         .send(validProject)
-        .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
           assert.equal(null, res.body.error);
@@ -73,7 +72,6 @@ describe('projects router', function() {
         .post(apiUrl('/'))
         .set(jsonHeaders)
         .send(invalidProject)
-        .expect(400)
         .end(function(err, res) {
           if (err) return done(err);
           var error = res.body.error[0];
@@ -89,7 +87,6 @@ describe('projects router', function() {
         .post(apiUrl('/'))
         .set(jsonHeaders)
         .send(invalidProject)
-        .expect(400)
         .end(function(err, res) {
           if (err) return done(err);
           var error = res.body.error[0];
@@ -105,7 +102,6 @@ describe('projects router', function() {
         .post(apiUrl('/'))
         .set(jsonHeaders)
         .send(invalidProject)
-        .expect(400)
         .end(function(err, res) {
           if (err) return done(err);
           var error = res.body.error[0];
@@ -121,7 +117,6 @@ describe('projects router', function() {
         .post(apiUrl('/'))
         .set(jsonHeaders)
         .send(validProject)
-        .expect(200)
         .end(function(err, res) {
           assert.equal(validProject.status, res.body.data.status);
           done();
@@ -134,7 +129,6 @@ describe('projects router', function() {
         .post(apiUrl('/'))
         .set(jsonHeaders)
         .send(invalidProject)
-        .expect(400)
         .end(function(err, res) {
           if (err) return done(err);
           var error = res.body.error[0];
@@ -150,7 +144,6 @@ describe('projects router', function() {
         .post(apiUrl('/'))
         .set(jsonHeaders)
         .send(validProject)
-        .expect(200)
         .end(function(err, res) {
           assert.equal(validProject.visibility, res.body.data.visibility);
           done();
@@ -160,14 +153,12 @@ describe('projects router', function() {
   });
 
   it('can access existing project', function(done) {
-    Project.create({name: 'Test Project'}, function(err, project) {
+    Project.create({name: 'Test Project', authority: authority}, function(err, project) {
       var project_id = project._id;
       supertest(app)
         .get(apiUrl('/' + project_id))
         .set(jsonHeaders)
-        .expect(200)
         .end(function(err, res) {
-          console.log(res.body);
           if (err) return done(err);
           assert.equal(null, res.body.error);
           assert.equal(project.name, res.body.data.name);
@@ -180,24 +171,22 @@ describe('projects router', function() {
     supertest(app)
       .get(apiUrl('/' + generateId()))
       .set(jsonHeaders)
-      .expect(404)
       .end(function(err, res) {
         if (err) return done(err);
-        assert.equal(null, res.body.error);
-        assert.equal('Not Found', res.body.data);
+        assert.equal(404, res.body.status);
+        assert.equal('Not Found', res.body.error[0].message);
         done();
       });
   });
 
   it('can update an existing project', function(done) {
-    var validProject = {name: 'Test Project'};
+    var validProject = {name: 'Test Project', authority: authority};
     Project.create(validProject, function(err, project) {
         validProject.name = 'Updated Project Name';
         supertest(app)
           .put(apiUrl('/' + project._id))
           .set(jsonHeaders)
           .send(validProject)
-          .expect(200)
           .end(function(err, res) {
             assert.equal(validProject.name, res.body.data.name);
             done();
@@ -208,14 +197,13 @@ describe('projects router', function() {
 
   it('it cant update not existing project', function(done) {
     var id = generateId();
-    var validProject = {name: 'Test Project'};
+    var validProject = {name: 'Test Project', authority: authority};
     supertest(app)
       .put(apiUrl('/' + id))
       .set(jsonHeaders)
       .send(validProject)
-      .expect(404)
       .end(function(err, res) {;
-        assert.equal('Not Found', res.body.data);
+        assert.equal(404, res.body.status);
         Project.findById(id, function(err, project) {
           assert.equal(null, project);
           done();
@@ -225,12 +213,11 @@ describe('projects router', function() {
   });
 
   it ('can delete existing project', function(done) {
-    Project.create({name: 'Test Project'}, function(err, project) {
+    Project.create({name: 'Test Project', authority: authority}, function(err, project) {
       var project_id = project._id;
       supertest(app)
         .delete(apiUrl('/' + project_id))
         .set(jsonHeaders)
-        .expect(200)
         .end(function(err, res) {
           if (err) return done(err);
           assert.equal(null, res.body.error);
