@@ -16,7 +16,7 @@ app.set('view cache', false);
 swig.setDefaults({ cache: false });
 
 // gateway
-app.use('/api/projects', require('./middlewares/auth'), mountApi('http://localhost:3001'));
+app.use('/api/v1/projects', require('./middlewares/auth'), mountApi('http://localhost:3001'));
 
 // middlewares
 // app.use(db);
