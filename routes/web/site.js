@@ -22,5 +22,9 @@ router.get('/dashboard', loginRequired, function(req, res) {
   res.render('dashboard');
 });
 
+router.get('/projects/:id', loginRequired, function(req, res) {
+  res.render('project/show');
+});
+
 
 module.exports = router;

@@ -5,12 +5,16 @@ var mountApi = require('./middlewares/mount_api');
 var db = require('./middlewares/db');
 var cookieParser = require('cookie-parser');
 var apiResponse = require('./middlewares/api_response');
+var swig = require('swig');
 
 var app = express();
 
 // configuration
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
+app.set('views', './views');
+
+swig.setDefaults({ loader: swig.loaders.fs(__dirname + '/views' )});
 
 app.set('view cache', false);
 swig.setDefaults({ cache: false });
