@@ -13,8 +13,8 @@ module.exports = {
         .end(function(err, res) {
           if (err) throw err;
 
-          if (res.error) {
-            reject(res.error);
+          if (res.body.error) {
+            reject(res.body.error);
           } else {
             resolve(res.body.data);
           }
@@ -30,8 +30,8 @@ module.exports = {
         .end(function(err, res) {
           if (err) throw err;
 
-          if (res.error) {
-            reject(res.error);
+          if (res.body.error) {
+            reject(res.body.error);
           } else {
             resolve(res.body.data);
           }
@@ -48,8 +48,8 @@ module.exports = {
         .end(function(err, res) {
           if (err) throw err;
 
-          if (res.error) {
-            reject(res.error);
+          if (res.body.error) {
+            reject(res.body.error);
           } else {
             resolve(res.body.data);
           }
@@ -65,8 +65,8 @@ module.exports = {
         .end(function(err, res) {
           if (err) throw err;
 
-          if (res.error) {
-            reject(res.error);
+          if (res.body.error) {
+            reject(res.body.error);
           } else {
             resolve(res.body.data);
           }

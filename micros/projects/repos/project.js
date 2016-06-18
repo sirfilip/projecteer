@@ -2,7 +2,7 @@ var Project = require('../models/project');
 
 module.exports =  {
   all: function(authority) {
-    return Project.authorizedFor(authority);
+    return Project.visibleFor(authority);
   },
 
   create: function(project, authority) {
@@ -11,7 +11,7 @@ module.exports =  {
   },
 
   findById: function(id, authority) {
-    return Project.authorizedFor(authority).where({_id:id});
+    return Project.visibleFor(authority).where({_id:id});
   },
 
   findByIdAndUpdate: function(id, project, authority) {
@@ -20,5 +20,11 @@ module.exports =  {
 
   delete: function(id, authority) {
     return Project.authorizedFor(authority).remove({_id: id}).exec();
+  },
+  latest: function(authority) {
+    return Project.visibleFor(authority).sort({created_at: -1}).limit(5);
+  },
+  participating: function(authority) {
+    return Project.participating(authority);
   }
 };

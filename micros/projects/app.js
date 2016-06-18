@@ -29,7 +29,23 @@ app.get('/', function(req, res) {
   ProjectRepo.all(req.authority).then(function(result) {
     res.respondWith(result);
   }).catch(function(err) {
-    res.failWith(500, error);
+    res.failWith(500, err);
+  });
+});
+
+app.get('/latest', function(req, res) {
+  ProjectRepo.latest(req.authority).then(function(result) {
+    res.respondWith(result);
+  }).catch(function(err) {
+    res.failWith(500, err)
+  });
+});
+
+app.get('/participating', function(req, res) {
+  ProjectRepo.participating(req.authority).then(function(result) {
+    res.respondWith(result);
+  }).catch(function(err) {
+    res.failWith(500, err)
   });
 });
 

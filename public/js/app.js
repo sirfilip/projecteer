@@ -19,10 +19,13 @@
     });
 
     $('[data-component]').each(function() {
-      var componentClass = $(this).data('component') + 'Component';
+      var data = $(this).data();
+      var componentClass = data.component + 'Component';
       var componentId = autoIncrementComponentId();
+      var props = data.props || null;
+      console.dir(props);
       $(this).attr('id', componentId);
-      var component = ReactDOM.render(React.createElement(window.reactComponents[componentClass], null), document.getElementById(componentId));
+      var component = ReactDOM.render(React.createElement(window.reactComponents[componentClass], props), document.getElementById(componentId));
       components.push({component: component, container: document.getElementById(componentId)});
     });
   });

@@ -7,10 +7,14 @@ var CHANGE = 'change';
 
 var Store = assign({}, EventEmitter.prototype, {
 
-  projects: [],
+  projects: {
+    latest: [],
+    participating: [],
+  },
+  errors: [],
 
-  getProjects: function() {
-    return this.projects;
+  getProjects: function(group) {
+    return this.projects[group];
   },
 
   addChangeListener: function(callback) {
@@ -25,23 +29,29 @@ var Store = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE);
   },
 
-  addProject: function(project) {
-    this.projects.concat([project]);
+  addProject: function(group, project) {
+    this.projects[group] = this.projects[group].concat([project]);
     this.triggerChange();
   },
 
-  addProjects: function(projects) {
-    this.projects = this.projects.concat(projects);
+  addProjects: function(group, projects) {
+    this.projects[group] = this.projects[group].concat(projects);
     this.triggerChange();
   },
 
-  removeProject: function(projectId) {
-    this.projects = _.reject(this.projects, function(project) {
-      return project._id === projectId;
-    });
+  storeErrors: function(errors) {
+    this.errors = errors;
     this.triggerChange();
+  },
+
+  clearErrors: function() {
+    this.errors = [];
+    this.triggerChange();
+  },
+
+  getErrors: function() {
+    return this.errors;
   }
-
 });
 
 //window.stores = window.stores || {};
@@ -49,8 +59,19 @@ var Store = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(payload) {
   switch(payload.action.type) {
+    case constants.PROJECT_LATEST_PROJECTS_LOAD:
+      Store.addProjects('latest', payload.action.projects);
+    break;
     case constants.PROJECT_USER_PROJECTS_LOAD:
-      Store.addProjects(payload.action.projects);
+      Store.addProjects('participating', payload.action.projects);
+    break;
+    case constants.PROJECT_CREATION_SUCCESSFUL:
+      Store.addProject('participating', payload.action.project);
+      Store.addProject('latest', payload.action.project);
+      Store.clearErrors();
+    break;
+    case constants.PROJECT_CREATION_FAILED:
+      Store.storeErrors(payload.action.errors);
     break;
   }
 });

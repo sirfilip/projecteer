@@ -55,9 +55,17 @@ projectSchema.statics.public = function() {
   return this.find({visibility: 'public'});
 };
 
-projectSchema.statics.authorizedFor = function(authority) {
+projectSchema.statics.ownedBy = function(authority) {
   return this.find({authority: authority});
 };
+projectSchema.statics.visibleFor = function(authority) {
+  return this.find({}).where({$or: [{authority: authority}, {authority: {$in: 'members'}}, {visibility: 'public'}]});
+};
+
+projectSchema.statics.participating = function(authority) {
+  return this.find({}).where({$or: [{authority: authority}, {authority: {$in: 'members'}}]});
+};
+
 
 // instance methods
 projectSchema.methods.open = function() {

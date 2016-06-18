@@ -1,5 +1,17 @@
 {% extends 'layouts/layout.html' %}
 
 {% block content %}
-  <div data-component="UserProjectsList"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div data-component="UserProjectsList" data-props='{"kind":"latest"}'></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div data-component="UserProjectsList" data-props='{"kind":"participating"}'></div>
+    </div>
+    <div class="col-md-6">
+      <div data-component="ProjectCreationForm"></div>
+    </div>
+  </div>
 {% endblock %}
