@@ -21,7 +21,7 @@ module.exports = {
   },
 
   _url: function(path) {
-      return 'http://localhost:3000/api' + path;
+      return 'http://localhost:3000/api/v1' + path;
   },
   _token: null,
   _getToken: function() {
