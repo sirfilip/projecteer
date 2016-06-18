@@ -50,7 +50,7 @@ app.get('/participating', function(req, res) {
 });
 
 app.post('/', function(req, res, next) {
-  indicative.validate(req.body, ProjectValidator.rules, ProjectValidator.messages).then(function() {
+  indicative.validateAll(req.body, ProjectValidator.rules, ProjectValidator.messages).then(function() {
     next();
   }).catch(function(errors) {
     res.failWith(400, errors);
@@ -76,7 +76,7 @@ app.get('/:id', function(req, res) {
 });
 
 app.put('/:id', function(req, res, next) {
-  indicative.validate(req.body, ProjectValidator.rules, ProjectValidator.messages).then(function() {
+  indicative.validateAll(req.body, ProjectValidator.rules, ProjectValidator.messages).then(function() {
     next();
   }).catch(function(errors) {
     res.failWith(400, errors);

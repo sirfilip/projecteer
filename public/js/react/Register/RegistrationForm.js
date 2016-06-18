@@ -19,12 +19,10 @@ window.reactComponents.RegistrationFormComponent = React.createClass({
       username: username,
       email: email,
       password: password
-    }).end(function(err, res) {
-      if (res.body.error) {
-        this.setState({errorMessages: res.body.error});
-      } else {
-        window.location.href = '/login';
-      }
+    }).then(function(res) {
+      window.location.href = '/login';
+    }).catch(function(errors) {
+      this.setState({errorMessages: errors});
     }.bind(this));
   },
 

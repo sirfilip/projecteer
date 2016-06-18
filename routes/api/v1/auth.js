@@ -34,7 +34,7 @@ var UserLoginValidator = {
 
 
 router.post('/register', function(req, res, next) {
-  indicative.validate(req.body, UserRegistrationValidator.rules, UserRegistrationValidator.messages).then(function() {
+  indicative.validateAll(req.body, UserRegistrationValidator.rules, UserRegistrationValidator.messages).then(function() {
     next();
   }).catch(function(err) {
     res.failWith(404, err);
@@ -46,7 +46,7 @@ router.post('/register', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-  indicative.validate(req.body, UserLoginValidator.rules, UserLoginValidator.messages).then(function() {
+  indicative.validateAll(req.body, UserLoginValidator.rules, UserLoginValidator.messages).then(function() {
     next();
   }).catch(function(error) {
     res.failWith(400, error);
