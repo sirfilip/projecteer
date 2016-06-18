@@ -5,19 +5,73 @@ module.exports = {
 
   post: function(path, data) {
     data = data || {};
-    return request.post(this._url(path)).set('x-access-token', this._getToken()).send(data);
+    return new Promise(function(resolve, reject) {
+      request
+        .post(this._url(path))
+        .set('x-access-token', this._getToken())
+        .send(data)
+        .end(function(err, res) {
+          if (err) throw err;
+
+          if (res.error) {
+            reject(res.error);
+          } else {
+            resolve(res.body.data);
+          }
+        });
+    }.bind(this));
   },
 
   get: function(path) {
-    return request.get(this._url(path)).set('x-access-token', this._getToken());
+    return new Promise(function(resolve, reject) {
+      request
+        .get(this._url(path))
+        .set('x-access-token', this._getToken())
+        .end(function(err, res) {
+          if (err) throw err;
+
+          if (res.error) {
+            reject(res.error);
+          } else {
+            resolve(res.body.data);
+          }
+        });
+    }.bind(this));
   },
 
   put: function(path, data) {
-    return request.put(this._url(path)).set('x-access-token', this._getToken()).send(data);
+    return new Promise(function(resolve, reject) {
+      request
+        .put(this._url(path))
+        .set('x-access-token', this._getToken())
+        .send(data)
+        .end(function(err, res) {
+          if (err) throw err;
+
+          if (res.error) {
+            reject(res.error);
+          } else {
+            resolve(res.body.data);
+          }
+        });
+    }.bind(this));
   },
 
   delete: function(path) {
-    return request.delete(this._url(path)).set('x-access-token', this._getToken());
+    return new Promise(function(resolve, reject) {
+      request
+        .delete(this._url(path))
+        .set('x-access-token', this._getToken())
+        .end(function(err, res) {
+          if (err) throw err;
+
+          if (res.error) {
+            reject(res.error);
+          } else {
+            resolve(res.body.data);
+          }
+        });
+    }.bind(this));
   },
 
   _url: function(path) {
@@ -36,22 +90,9 @@ module.exports = {
     return !!this._getToken();
   },
   authenticate: function(email, password) {
-    var self = this;
-    return new Promise(function(resolve, reject) {
-      self.post('/auth/login', {
-        email: email,
-        password: password
-      }).end(function(err, res) {
-        if (res.body.error) {
-          reject(res.body.error);
-        } else {
-          self._setToken(res.body.data.token);
-          resolve({
-            message: res.body.data.message,
-            token: res.body.data.token
-          });
-        }
-      });
+    return this.post('/auth/login', {
+      email: email,
+      password: password
     });
   },
   logout: function() {

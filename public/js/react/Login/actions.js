@@ -8,6 +8,7 @@ module.exports = {
       type: constants.LOGIN_IN_PROGRESS
     });
     api.authenticate(email, password).then(function(result) {
+      console.log(result);
       AppDispatcher.handleViewAction({
         type: constants.LOGIN_SUCCESSFULL,
         token: result.token
